@@ -14,7 +14,7 @@ include("../src/MazeGeneration.jl")
 
 using .MazeGeneration
 
-# Function to print out nodes and their walls
+#= Function to print out nodes and their walls
 function print_maze_walls(maze::Maze)
     height, width = size(maze.nodes)
     for y in 1:height
@@ -28,6 +28,7 @@ function print_maze_walls(maze::Maze)
         end
     end
 end
+=# 
 
 # Test Maze Generation and Visualization
 @testset "Maze Generation and Visualization Tests" begin
@@ -44,8 +45,8 @@ end
     @test size(maze.nodes, 2) == width
 
     # Print out the nodes and their walls
-    println("Maze Nodes and Walls:")
-    print_maze_walls(maze)
+    # println("Maze Nodes and Walls:")
+    # print_maze_walls(maze)
 
     # Test visualization
     println("Maze Visualization:")
