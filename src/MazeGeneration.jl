@@ -53,7 +53,7 @@ function generate_maze!(maze::Maze)
     # Start at a random node
     start_x = rand(1:size(maze.nodes, 2))
     start_y = rand(1:size(maze.nodes, 1))
-    println("Random start position: ($start_x, $start_y)")  # Debug print
+    # println("Random start position: ($start_x, $start_y)")  # Debug print
     current = maze.nodes[start_y, start_x]
     current.visited = true
     maze.start = current
@@ -83,9 +83,9 @@ function generate_maze!(maze::Maze)
             end
 
             # Debug prints
-            println("Current Node: $(current.x), $(current.y)")
-            println("Current Direction: $current_dir")
-            println("Right Direction: $(right_direction(current_dir)), Right Index: $(mod(findfirst(x -> x == current_dir, dir_order), 4) + 1)")
+            # println("Current Node: $(current.x), $(current.y)")
+            # println("Current Direction: $current_dir")
+            # println("Right Direction: $(right_direction(current_dir)), Right Index: $(mod(findfirst(x -> x == current_dir, dir_order), 4) + 1)")
 
             # Remove the wall between current and next_node
             if next_node.x == current.x + 1
@@ -111,7 +111,7 @@ function generate_maze!(maze::Maze)
     # Set a random end node
     end_x = rand(1:size(maze.nodes, 2))
     end_y = rand(1:size(maze.nodes, 1))
-    println("Random end position: ($end_x, $end_y)")  # Debug print
+    # println("Random end position: ($end_x, $end_y)")  # Debug print
     maze.goal = maze.nodes[end_y, end_x]
 end
 
@@ -123,4 +123,4 @@ function Base.show(io::IO, maze::Maze)
     visualize(maze.nodes, maze.start, maze.goal, maze.path)
 end
 
-end # module MazeGeneration
+end 
