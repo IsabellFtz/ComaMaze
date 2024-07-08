@@ -11,18 +11,18 @@ function solve(maze::Maze)
     current = maze.start
     goal = maze.goal
     path = [current]
-    visualize_path(maze.nodes, maze.start, maze.goal, path)
+    # visualize_path(maze.nodes, maze.start, maze.goal, path)
+
     # Directions in order of preference: right, down, left, up
     directions = Dict("right" => (0, 1), "down" => (1, 0), "left" => (0, -1), "up" => (-1, 0))
     direction_order = ["right", "up", "left", "down"] #counter clock wise
     current_direction = "up"
-    #visited = Set([current])
     stuck_counter = 0
-    max_stuck_counter = 16  
+    max_stuck_counter = 9
      
     while !(current.x == goal.x && current.y == goal.y)
-        println("Current Node: $(current.x), $(current.y)")
-        println("Facing Direction: $current_direction")
+        # println("Current Node: $(current.x), $(current.y)")
+        # println("Facing Direction: $current_direction")
 
         # Try to turn right
         d = findfirst(direction -> direction == current_direction, direction_order) # gegen Uhrzeiger 
@@ -39,21 +39,19 @@ function solve(maze::Maze)
         loc_right = direction_order[right_idx]
         next_cell = move(current, directions[loc_right], maze.nodes)
 
-        println("Right of Facing Direction: $loc_right")
+        # println("Right of Facing Direction: $loc_right")
 
         if !isnothing(next_cell) && can_move(current, next_cell) 
-            println("Action: Can move right.")
+            # println("Action: Can move right.")
             current_direction = loc_right
             current = next_cell
             push!(path, current)
-            #push!(visited, current)
             stuck_counter = 0
-            # Visualize the path so far
-            visualize_path(maze.nodes, maze.start, maze.goal, path)
-        else
-            # Turn counter-clockwise 
-            println("Action: Turn.")
-            stuck_counter = stuck_counter +1
+            # visualize_path(maze.nodes, maze.start, maze.goal, path)
+
+        else # Turn counter-clockwise 
+            # println("Action: Turn.")
+            stuck_counter +=1
             d = findfirst(direction -> direction == current_direction, direction_order) # counter clockwise
             # ugly but it works :)
             if d == 1 
@@ -66,9 +64,7 @@ function solve(maze::Maze)
                 direction_index = 1
             end
             current_direction = direction_order[direction_index]
-            # println(current_direction,direction_index,d)
         end
-
 
         # If stuck in loop, break out
         if stuck_counter > max_stuck_counter
@@ -77,11 +73,37 @@ function solve(maze::Maze)
         end
 
     end
-
     maze.path = path
+    maze.path = shortestpath(path)
     return path
 end
 
+# Function to find the shortest path by removing cycles
+function shortestpath(path::Vector{Node})
+    seen_nodes = Dict{Node, Int}()
+    i = 1
+    while i <= length(path)
+        node = path[i]
+        if haskey(seen_nodes, node)
+            start_idx = seen_nodes[node]
+            end_idx = i - 1
+            # println("Removing cycle from index $start_idx to $end_idx")
+            splice!(path, start_idx:end_idx)
+            i = start_idx # reset to the position where the cycle started
+            empty!(seen_nodes) # reset seen_nodes as the indices have changed
+            for j in 1:i-1
+                seen_nodes[path[j]] = j
+            end
+        else
+            seen_nodes[node] = i
+            i += 1
+        end
+    end
+    return path
+end
+
+
+ 
 # Helper function to move in the given direction
 function move(node::Node, direction::Tuple{Int, Int}, nodes::Matrix{Node})
     y, x = node.y + direction[1], node.x + direction[2]
@@ -106,9 +128,8 @@ function can_move(current::Node, next_node::Node)
     return false
 end
 
-# Function to visualize the current path
+# Function to visualize the maze 
 function visualize_path(nodes::Matrix{Node}, start::Node, goal::Node, path::Vector{Node})
-    println("Visualizing the maze:")
     height, width = size(nodes)
 
     for y in 1:height
@@ -126,7 +147,7 @@ function visualize_path(nodes::Matrix{Node}, start::Node, goal::Node, path::Vect
                 print("Ⓢ ")
             elseif node == goal
                 print("☆ ")
-            elseif node in path
+            elseif node in path #&& count(==(node), path) < 2
                 print("• ")
             else
                 print("  ")
@@ -142,4 +163,4 @@ function visualize_path(nodes::Matrix{Node}, start::Node, goal::Node, path::Vect
     println("+")
 end
 
-end # module Solver
+end 
