@@ -128,7 +128,7 @@ function can_move(current::Node, next_node::Node)
     return false
 end
 
-# Function to visualize the maze 
+#= Function to visualize the maze 
 function visualize_path(nodes::Matrix{Node}, start::Node, goal::Node, path::Vector{Node})
     height, width = size(nodes)
 
@@ -162,5 +162,6 @@ function visualize_path(nodes::Matrix{Node}, start::Node, goal::Node, path::Vect
     end
     println("+")
 end
+=#
 
 end 
