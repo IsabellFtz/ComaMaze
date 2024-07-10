@@ -128,40 +128,4 @@ function can_move(current::Node, next_node::Node)
     return false
 end
 
-#= Function to visualize the maze 
-function visualize_path(nodes::Matrix{Node}, start::Node, goal::Node, path::Vector{Node})
-    height, width = size(nodes)
-
-    for y in 1:height
-        # Top border
-        for x in 1:width
-            node = nodes[y, x]
-            print(node.walls[:top] ? "+---" : "+   ")
-        end
-        println("+")
-        # Left border and cell content
-        for x in 1:width
-            node = nodes[y, x]
-            print(node.walls[:left] ? "| " : "  ")
-            if node == start
-                print("Ⓢ ")
-            elseif node == goal
-                print("☆ ")
-            elseif node in path #&& count(==(node), path) < 2
-                print("• ")
-            else
-                print("  ")
-            end
-        end
-        println("|")
-    end
-
-    # Bottom border
-    for x in 1:width
-        print("+---")
-    end
-    println("+")
-end
-=#
-
 end 
