@@ -35,4 +35,4 @@ function neighbors(node::Node, nodes::Matrix{Node})
     return neighbors
 end
 
-end # module Core
+end 
